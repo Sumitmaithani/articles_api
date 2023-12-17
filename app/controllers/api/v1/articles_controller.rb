@@ -26,7 +26,7 @@ class Api::V1::ArticlesController < ApplicationController
     else 
       render json: {
         error: "Error Creating..."
-      }
+      }, status: 400
     end
   end
 
