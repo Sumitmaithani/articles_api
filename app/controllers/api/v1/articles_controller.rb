@@ -46,7 +46,7 @@ class Api::V1::ArticlesController < ApplicationController
     article = Article.find_by(id: params[:id])
     if article
       article.destroy
-      render json: "Article deleted successfully"
+      render json: "Article deleted successfully", status: 200
     else
       render json: {
         error: "Article not found"
