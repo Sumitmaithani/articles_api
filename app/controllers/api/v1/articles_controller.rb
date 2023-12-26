@@ -1,7 +1,7 @@
 class Api::V1::ArticlesController < ApplicationController
   def index
     articles = Article.all
-    render json: articles, status: 200
+    render json: ArticlesRepresenter.new(articles).as_json
   end
 
   def show
