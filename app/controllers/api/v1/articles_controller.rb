@@ -16,11 +16,8 @@ class Api::V1::ArticlesController < ApplicationController
   end
 
   def create
-    article = Article.new(
-      title: arti_params[:title],
-      body: arti_params[:body],
-      author: arti_params[:author]
-    )
+    author = Author.create!(author_params)
+    article = Article.new(arti_params.merge(author_id: author.id))
     if article.save
       render json: article, status: 200
     else 
@@ -55,11 +52,18 @@ class Api::V1::ArticlesController < ApplicationController
   end
 
   private
+  def author_params
+    params.require(:author).permit([
+      :first_name,
+      :last_name,
+      :age
+    ])
+  end
+
   def arti_params
     params.require(:article).permit([
       :title,
-      :body,
-      :author
+      :body
     ])
   end
 end

@@ -18,9 +18,13 @@ describe 'Articles Api', type: :request do
     describe 'POST /articles' do
         it 'create a new article' do
             expect {
-                post '/api/v1/articles', params: { article: { title: "sample1", author: "funshuk wagodu", body: "this is demo" } }
+                post '/api/v1/articles', params: { 
+                    article: { title: "sample1", body: "this is demo" },
+                    author: {  first_name: "funshuk", last_name: "wagodu", age: "46" }
+                }
             }.to change { Article.count }.from(0).to(1)
             expect(response).to have_http_status(200)
+            expect(Author.count). to eq(1)
         end
     end
 
