@@ -1,6 +1,8 @@
 class Api::V1::ArticlesController < ApplicationController
+MAX_PAGINATION_LIMIT = 100
+
   def index
-    articles = Article.all
+    articles = Article.limit(limit).offset(params[:offset])
     render json: ArticlesRepresenter.new(articles).as_json
   end
 
@@ -19,7 +21,7 @@ class Api::V1::ArticlesController < ApplicationController
     author = Author.create!(author_params)
     article = Article.new(arti_params.merge(author_id: author.id))
     if article.save
-      render json: article, status: 200
+      render json: ArticleRepresenter.new(article).as_json, status: 200
     else 
       render json: {
         error: "Error Creating..."
@@ -52,6 +54,13 @@ class Api::V1::ArticlesController < ApplicationController
   end
 
   private
+  def limit
+    [
+      params.fetch(:limit,MAX_PAGINATION_LIMIT).to_i,
+      MAX_PAGINATION_LIMIT
+    ].min
+  end
+
   def author_params
     params.require(:author).permit([
       :first_name,
